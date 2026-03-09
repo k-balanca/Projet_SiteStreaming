@@ -1,16 +1,17 @@
 <?php include('../config/get_api.php'); ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>HYPER - Streaming</title>
-    <link rel="stylesheet" href="../css/app.css">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
 
     <header>
         <div class="logo">HYPER</div>
-        <nav>
+        <nav style ="margin-right: 200px;">
             <ul>
                 <li>Horreur</li>
                 <li>Adventure</li>
@@ -19,22 +20,23 @@
                 <li>fantastique</li>
             </ul>
         </nav>
-        <div class="search-icon">🔍</div>
     </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>San Andreas</h1>
-            <p>Lara races through Istanbul to uncover an ancient artifact before a secret society does.</p>
+
+    <section>
+        <div style ="margin-top: 500px; margin-left: 100px;">
+            <h1 style ="font-size: 100px">San Andreas</h1>
+            <p>Alors qu'un séisme vient de frapper, un pilote d'hélicoptère et sa future ex-femme doivent sauver leur fille avant que la terre se mette à trembler</p>
             <div class="buttons">
-                <img  src="./image/san-andreas.jpg" alt="San Andreas">
-                <button class="btn-watch">▶ Watch Now</button>
-                <button class="btn-free">Get This Free</button>
+                <button class="bouton">▶ regarder maintenant</button>
+                <button class="bouton">rajouter aux favoris</button>
             </div>
         </div>
     </section>
 
-    <main>
+
+    <main style ="margin-top: 500px;">
+
 
 <section class="movie-row">
 
@@ -42,10 +44,21 @@
 
 
     <section class="movie-row">
-    <h2>Latest Movies</h2>
+    <h2>Les films d'action</h2>
     <div class="movie-grid">
+        <?php
+            afficherFilms("action");
+        ?>
 
-        <?php afficherFilms('action'); ?>
+    </div>
+    </section>
+
+        <section class="movie-row">
+    <h2>Les films de horreur</h2>
+    <div class="movie-grid">
+        <?php
+            afficherFilms("horror");
+        ?>
 
     </div>
     </section>

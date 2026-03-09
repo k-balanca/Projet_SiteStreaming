@@ -1,13 +1,13 @@
 <?php
-
+if (!function_exists('afficherFilms')) {
 function afficherFilms($recherche) {
     $apiKey = "738abeff";
-    $url = "http://www.omdbapi.com/?apikey=" . $apiKey . "&s=" . urlencode($recherche);
-    ECHO $url;
+    $url = "https://www.omdbapi.com/?apikey=" . $apiKey . "&s=" . urlencode($recherche);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     
@@ -39,4 +39,5 @@ function afficherFilms($recherche) {
         $errorMsg = isset($data['Error']) ? $data['Error'] : "Inconnu";
         echo "<p>Erreur API pour '$recherche' : " . htmlspecialchars($errorMsg) . "</p>";
     }
+}
 }

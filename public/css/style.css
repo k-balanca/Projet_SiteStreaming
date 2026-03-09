@@ -1,0 +1,79 @@
+body {
+    background-color: #000;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+     background-image: 
+        linear-gradient(to bottom, 
+            rgba(0,0,0,0.3) 0%,      /* Léger en haut */
+            rgba(0,0,0,0.8) 50%,     /* Plus noir au milieu */
+            rgba(0,0,0,0.7) 100%),     /* Completement noir en bas */
+        url("./sanAndreas.jpg");
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px 50px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
+    position: fixed;
+    width: 100%;
+    top: 0;          
+    left: 0; 
+    z-index: 100;
+}
+
+.logo { 
+    color: #E50914; 
+    font-weight: bold; 
+    font-size: 35px; 
+}
+
+nav ul { 
+    display: flex; 
+    list-style: none; 
+    gap: 20px; 
+}
+
+.bouton {
+    background-color: #E50914;
+    color: white;                    /* ← Correction: color, pas text-decoration */
+    font-weight: 600;                /* ← Plus subtil que bold */
+    border: none;                    /* ← Bordure propre */
+    border-radius: 4px;              /* ← Coins légèrement arrondis Netflix */
+    padding: 12px 26px;              /* ← Espacement confortable */
+    font-size: 16px;                 /* ← Taille standard */
+    cursor: pointer;                 /* ← Main au survol */
+    transition: background-color 0.2s; /* ← Animation fluide */
+}
+
+.bouton:hover {
+    background-color: #f8121e;       /* ← Légèrement plus clair */
+}
+
+.movie-grid {
+    display: flex;
+    overflow-x: auto; /* Active le scroll horizontal */
+    gap: 20px;
+    padding: 20px 0;
+    scrollbar-width: none; /* Cache la barre sur Firefox */
+}
+
+.movie-grid::-webkit-scrollbar {
+    display: none; /* Cache la barre sur Chrome/Safari */
+}
+
+.card {
+    min-width: 200px; /* Force la largeur pour que les films ne s'écrasent pas */
+    flex-shrink: 0;
+}
+
+.card img {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
