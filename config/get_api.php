@@ -1,4 +1,5 @@
 <?php
+
 if (!function_exists('afficherFilms')) {
 function afficherFilms($recherche) {
     $apiKey = "738abeff";
@@ -40,4 +41,60 @@ function afficherFilms($recherche) {
         echo "<p>Erreur API pour '$recherche' : " . htmlspecialchars($errorMsg) . "</p>";
     }
 }
+}
+
+if (!function_exists('afficherTousLesFilms')) {
+    function afficherTousLesFilms($lettres = null, $maxPagesParLettre = 3) {
+        $apiKey = "738abeff";
+
+        // Si aucune lettre spécifique n'est fournie, on prend a-z
+        if ($lettres === null) {
+            $lettres = range('a', 'z');
+        }
+
+        foreach ($lettres as $letter) {
+            for ($page = 1; $page <= $maxPagesParLettre; $page++) {
+                $url = "https://www.omdbapi.com/?apikey=$apiKey&s=" . urlencode($letter) . "&type=movie&page=" . $page;
+                
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+                curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 20);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                
+                $response = curl_exec($ch);
+                
+                if (curl_errno($ch)) {
+                    echo 'Erreur cURL : ' . curl_error($ch);
+                    curl_close($ch);
+                    continue 2; // passe à la lettre suivante
+                }
+                curl_close($ch);
+                
+                $data = json_decode($response, true);
+                
+                if (isset($data['Search']) && is_array($data['Search'])) {
+                    foreach ($data['Search'] as $movie) {
+                        $poster = ($movie['Poster'] !== 'N/A') ? $movie['Poster'] : 'https://via.placeholder.com/300x450';
+                        ?>
+                        <div class="card">
+                            <div class="poster-container">
+                                <img src="<?php echo $poster; ?>" alt="<?php echo htmlspecialchars($movie['Title']); ?>">
+                                <span class="badge">New Added</span>
+                            </div>
+                            <p class="movie-title"><?php echo htmlspecialchars($movie['Title']); ?></p>
+                        </div>
+                        <?php
+                    }
+                } else {
+                    // Si trop de résultats, on passe à la lettre suivante
+                    if (isset($data['Error']) && $data['Error'] === 'Too many results.') {
+                        break; // inutile de continuer à paginer cette lettre
+                    }
+                }
+            }
+        }
+    }
 }
