@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +49,9 @@ Route::get('/compte', function () {
     return view('compte');
 })->name('compte');
 
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
 // Movie detail JSON API (used by welcome.blade.php showMovieDetails)
 
 Route::get('/movie/{imdbid}', function ($imdbid) {
@@ -56,6 +61,29 @@ Route::get('/movie/{imdbid}', function ($imdbid) {
         return response()->json(['error' => 'Detail not found'], 404);
     }
     return response()->json($details);
+});
+
+Route::get('/api/movies', function (Request $request) {
+    include_once base_path('config/get_api.php');
+
+    $query = $request->query('query', 'a');
+    $page = max(1, intval($request->query('page', 1)));
+    $type = $request->query('type', 'movie');
+
+    $result = fetchMoviesFromOmdb($query, $type, $page);
+
+    if (isset($result['Error']) && !empty($result['Error'])) {
+        return response()->json(['success' => false, 'message' => $result['Error']], 400);
+    }
+
+    return response()->json([
+        'success' => true,
+        'query' => $query,
+        'type' => $type,
+        'page' => $page,
+        'totalResults' => isset($result['totalResults']) ? intval($result['totalResults']) : 0,
+        'movies' => isset($result['Search']) ? $result['Search'] : [],
+    ]);
 });
 
 Route::get('/contact', function () {

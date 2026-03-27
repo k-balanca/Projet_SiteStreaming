@@ -1,18 +1,16 @@
 <?php
 
-if (!function_exists('afficherFilms')) {
-function afficherFilms($recherche) {
-
+if (!function_exists('fetchMoviesFromOmdb')) {
+function fetchMoviesFromOmdb($query, $type = 'movie', $page = 1) {
     $apiKey = "738abeff";
     $cacheDir = __DIR__ . '/../storage/cache/';
-    $cacheFile = $cacheDir . md5($recherche) . '.json';
+    $cacheFile = $cacheDir . md5($query . '|' . $type . '|' . $page) . '.json';
     $cacheTime = 3600;
 
     if (file_exists($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTime) {
         $response = file_get_contents($cacheFile);
     } else {
-
-        $url = "https://www.omdbapi.com/?apikey=".$apiKey."&s=".urlencode($recherche);
+        $url = "https://www.omdbapi.com/?apikey=" . $apiKey . "&s=" . urlencode($query) . "&type=" . urlencode($type) . "&page=" . intval($page);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -25,9 +23,9 @@ function afficherFilms($recherche) {
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            echo 'Erreur cURL : '.curl_error($ch);
+            echo 'Erreur cURL : ' . curl_error($ch);
             curl_close($ch);
-            return;
+            return ['Search' => [], 'totalResults' => 0, 'Error' => 'Erreur cURL : ' . curl_error($ch)];
         }
 
         curl_close($ch);
@@ -41,33 +39,75 @@ function afficherFilms($recherche) {
 
     $data = json_decode($response, true);
 
-    if (isset($data['Search']) && is_array($data['Search'])) {
-
-        foreach ($data['Search'] as $movie) {
-
-            $poster = ($movie['Poster'] !== 'N/A') ? $movie['Poster'] : 'https://via.placeholder.com/300x450';
-
-            ?>
-            <div class="card" data-imdbid="<?php echo $movie['imdbID']; ?>" onclick="showMovieDetails(this)">
-                <div class="poster-container">
-                    <img src="<?php echo $poster; ?>" alt="<?php echo htmlspecialchars($movie['Title']); ?>">
-                    <span class="badge">New Added</span>
-                </div>
-                <p class="movie-title"><?php echo htmlspecialchars($movie['Title']); ?></p>
-            </div>
-            <?php
-
-        }
-
-    } else {
-
-        $errorMsg = isset($data['Error']) ? $data['Error'] : "Inconnu";
-        echo "<p>Erreur API pour '".htmlspecialchars($recherche)."' : ".htmlspecialchars($errorMsg)."</p>";
-
+    if (isset($data['Error']) && $data['Error'] === 'Too many results.') {
+        // Force une pagination plus fine dans le front-end
+        return ['Search' => [], 'totalResults' => 0, 'Error' => 'Trop de résultats, utilisez la barre de recherche ou cliquez sur Afficher +.'];
     }
 
+    if (isset($data['Search']) && isset($data['totalResults'])) {
+        $data['totalResults'] = intval($data['totalResults']);
+    }
+
+    return $data;
 }
 }
+
+if (!function_exists('renderMovieCards')) {
+function renderMovieCards($items) {
+    if (!isset($items['Search']) || !is_array($items['Search'])) {
+        $errorMsg = isset($items['Error']) ? $items['Error'] : 'Inconnu';
+        echo '<p>Erreur API : ' . htmlspecialchars($errorMsg) . '</p>';
+        return;
+    }
+
+    foreach ($items['Search'] as $movie) {
+        $poster = ($movie['Poster'] !== 'N/A') ? $movie['Poster'] : 'https://via.placeholder.com/300x450';
+        ?>
+        <div class="card" data-imdbid="<?php echo htmlspecialchars($movie['imdbID']); ?>" onclick="showMovieDetails(this)">
+            <div class="poster-container">
+                <img src="<?php echo $poster; ?>" alt="<?php echo htmlspecialchars($movie['Title']); ?>">
+                <span class="badge">New Added</span>
+            </div>
+            <p class="movie-title"><?php echo htmlspecialchars($movie['Title']); ?></p>
+        </div>
+        <?php
+    }
+}
+}
+
+if (!function_exists('afficherTousLesFilms')) {
+function afficherTousLesFilms($query = 'a', $page = 1) {
+    $result = fetchMoviesFromOmdb($query, 'movie', $page);
+    if (isset($result['Error']) && !empty($result['Error'])) {
+        echo '<p style="grid-column: 1 / -1; text-align: center; color: #ffcccc;">' . htmlspecialchars($result['Error']) . '</p>';
+        return;
+    }
+    renderMovieCards($result);
+}
+}
+
+if (!function_exists('afficherToutesLesSeries')) {
+function afficherToutesLesSeries($query = 'a', $page = 1) {
+    $result = fetchMoviesFromOmdb($query, 'series', $page);
+    if (isset($result['Error']) && !empty($result['Error'])) {
+        echo '<p style="grid-column: 1 / -1; text-align: center; color: #ffcccc;">' . htmlspecialchars($result['Error']) . '</p>';
+        return;
+    }
+    renderMovieCards($result);
+}
+}
+
+if (!function_exists('afficherFilms')) {
+function afficherFilms($recherche, $page = 1) {
+    $result = fetchMoviesFromOmdb($recherche, 'movie', $page);
+    if (isset($result['Error']) && !empty($result['Error'])) {
+        echo '<p style="grid-column: 1 / -1; text-align: center; color: #ffcccc;">' . htmlspecialchars($result['Error']) . '</p>';
+        return;
+    }
+    renderMovieCards($result);
+}
+}
+
 
 
 if (!function_exists('getMovieDetails')) {
