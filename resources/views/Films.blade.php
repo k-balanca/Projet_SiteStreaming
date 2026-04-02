@@ -13,16 +13,26 @@
 
     <main class="movies" style="padding-top: 120px;">
         <section class="movie-row">
-            <h2>Tous les films</h2>
+            <h2>Barre de recherche</h2>
 
             <div class="search-container">
                 <input type="text" id="searchInput" placeholder="Rechercher un film...">
                 <button id="clearSearch">✕</button>
             </div>
-
+            
+            <h2>Top Films</h2>
+            
+        
             <div id="movieGrid" class="movie-grid">
-                <?php afficherTousLesFilms('a', 1); ?>
+                <?php afficherTousLesFilms('fra', 2); ?>
             </div>
+            <div class="scroll-indicator">→</div>
+            
+            <div id="movieGrid2" class="movie-grid">
+                <?php afficherTousLesFilms('ara', 1); ?>
+            </div>
+            <div class="scroll-indicator">→</div>
+
 
             <div style="text-align:center; margin-top:20px;">
                 <button id="loadMoreBtn" class="bouton">Afficher +</button>
@@ -47,12 +57,13 @@
 <script>
     let currentPage = 1;
     let currentQuery = 'a';
-    const movieGrid = document.getElementById('movieGrid');
+    const movieGrid1 = document.getElementById('movieGrid1');
+    const movieGrid2 = document.getElementById('movieGrid2');
     const searchInput = document.getElementById('searchInput');
     const clearBtn = document.getElementById('clearSearch');
     const loadMoreBtn = document.getElementById('loadMoreBtn');
 
-    function renderCards(items) {
+    function renderCards(items, targetGrid) {
         if (!items || !Array.isArray(items)) return;
         const charles = items.map(movie => {
             const poster = movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450';
@@ -66,7 +77,21 @@
                     </div>
                 `;
         }).join('');
-        movieGrid.insertAdjacentHTML('beforeend', charles);
+        targetGrid.insertAdjacentHTML('beforeend', charles);
+        
+        // Vérifier si le contenu dépasse et afficher l'indicateur
+        checkOverflow(targetGrid);
+    }
+
+    function checkOverflow(grid) {
+        const indicator = grid.nextElementSibling;
+        if (indicator && indicator.classList.contains('scroll-indicator')) {
+            if (grid.scrollWidth > grid.clientWidth) {
+                indicator.classList.add('show');
+            } else {
+                indicator.classList.remove('show');
+            }
+        }
     }
 
     function fetchMovies(query, page = 1, append = false) {
@@ -74,24 +99,29 @@
             .then(response => response.json())
             .then(data => {
                 if (!data.success) {
-                    movieGrid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#ff7373;">${data.message}</p>`;
+                    movieGrid1.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#ff7373;">${data.message}</p>`;
+                    movieGrid2.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#ff7373;">${data.message}</p>`;
                     return;
                 }
 
                 if (!append) {
-                    movieGrid.innerHTML = '';
+                    movieGrid1.innerHTML = '';
+                    movieGrid2.innerHTML = '';
                 }
 
                 if (!data.movies || data.movies.length === 0) {
-                    movieGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:#aaa;">Aucun film trouvé.</p>';
+                    movieGrid1.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:#aaa;">Aucun film trouvé.</p>';
+                    movieGrid2.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:#aaa;">Aucun film trouvé.</p>';
                     return;
                 }
 
-                renderCards(data.movies);
+                renderCards(data.movies, movieGrid1);
+                renderCards(data.movies, movieGrid2);
             })
             .catch(error => {
                 console.error('Erreur API :', error);
-                movieGrid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:#ff0000;">Erreur de chargement</p>';
+                movieGrid1.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:#ff0000;">Erreur de chargement</p>';
+                movieGrid2.innerHTML = '<p style="grid-column: 1/-1; text-align:center; color:#ff0000;">Erreur de chargement</p>';
             });
     }
 

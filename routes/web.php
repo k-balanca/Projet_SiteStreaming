@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\MovieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,9 +42,7 @@ Route::get('/series', function () {
     return view('series');
 })->name('series');
 
-Route::get('/favoris', function () {
-    return view('favoris');
-})->name('favoris');
+Route::get('/favoris', [MovieController::class, 'favorites'])->name('favoris');
 
 Route::get('/compte', function () {
     return view('compte');
@@ -51,6 +50,10 @@ Route::get('/compte', function () {
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+
+Route::post('/like-movie', [MovieController::class, 'like'])->name('like.movie');
+Route::post('/unlike-movie', [MovieController::class, 'unlike'])->name('unlike.movie');
 
 // Movie detail JSON API (used by welcome.blade.php showMovieDetails)
 
@@ -86,6 +89,4 @@ Route::get('/api/movies', function (Request $request) {
     ]);
 });
 
-Route::get('/contact', function () {
-    return view('contact');
-})->name('contact');
+

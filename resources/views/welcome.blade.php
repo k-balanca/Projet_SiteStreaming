@@ -34,6 +34,7 @@
         <div class="movie-grid">
             <?php afficherFilms("latest"); ?>
         </div>
+        <div class="scroll-indicator">→</div>
     </section>
 
     <section class="movie-row">
@@ -41,6 +42,7 @@
         <div class="movie-grid">
             <?php afficherFilms("action"); ?>
         </div>
+        <div class="scroll-indicator">→</div>
     </section>
 
     <section class="movie-row">
@@ -48,6 +50,7 @@
         <div class="movie-grid">
             <?php afficherFilms("horror"); ?>
         </div>
+        <div class="scroll-indicator">→</div>
     </section>
 
     <section class="movie-row">
@@ -55,6 +58,7 @@
         <div class="movie-grid">
             <?php afficherFilms("comedy"); ?>
         </div>
+        <div class="scroll-indicator">→</div>
     </section>
 
     <section class="movie-row">
@@ -62,6 +66,7 @@
         <div class="movie-grid">
             <?php afficherFilms("popular"); ?>
         </div>
+        <div class="scroll-indicator">→</div>
     </section>
 
 </section>
@@ -77,6 +82,7 @@
             </div>
         </div>
     </div>
+
 
     <script>
         function showMovieDetails(element) {
@@ -133,6 +139,51 @@
                 modal.style.display = 'none';
             }
         }
+
+        // Fonction pour vérifier et afficher les indicateurs de scroll
+        function checkOverflow() {
+            const grids = document.querySelectorAll('.movie-grid');
+            grids.forEach(grid => {
+                const indicator = grid.nextElementSibling;
+                if (indicator && indicator.classList.contains('scroll-indicator')) {
+                    if (grid.scrollWidth > grid.clientWidth) {
+                        indicator.classList.add('show');
+                    } else {
+                        indicator.classList.remove('show');
+                    }
+                }
+            });
+        }
+
+        const csrfToken = '{{ csrf_token() }}';
+
+    function likeMovie(imdbid) {
+        fetch('{{ route("like.movie") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ imdbid })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                alert('Ajouté aux favoris');
+            } else {
+                alert('Erreur: ' + (data.message || ''));
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Erreur de connexion');
+        });
+    }
+
+        // Vérifier au chargement de la page et au redimensionnement
+        window.addEventListener('load', checkOverflow);
+        window.addEventListener('resize', checkOverflow);
     </script>
 
 </body>
