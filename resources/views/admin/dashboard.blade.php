@@ -13,4 +13,6 @@
             <p>{{ $adminCount }}</p>
         </div>
     </div>
+    <br>
+    @include('admin.users')
 @endsection

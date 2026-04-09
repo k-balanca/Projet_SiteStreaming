@@ -26,15 +26,6 @@
                 <a href="{{ route('profile.edit') }}" class="bouton">Modifier le profil</a>
             </section>
 
-            <section class="list-panel">
-                <h2>Liste des Favoris</h2>
-                <p>Votre liste de films favoris apparaîtra ici.</p>
-            </section>
-
-            <section class="list-panel">
-                <h2>À regarder plus tard</h2>
-                <p>Votre watchlist apparaîtra ici.</p>
-            </section>
         </div>
     </main>
 

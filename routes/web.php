@@ -44,9 +44,13 @@ Route::get('/series', function () {
 
 Route::get('/favoris', [MovieController::class, 'favorites'])->name('favoris');
 
-Route::get('/compte', function () {
-    return view('compte');
-})->name('compte');
+Route::get('/profile/compte', function () {
+    return view('profile.compte');
+})->name('profile.compte');
+
+Route::get('/profile/edit', function () {
+    return view('profile.edit');
+})->name('profile.edit');
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
@@ -109,3 +113,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return view('admin.dashboard', compact('userCount','adminCount'));
     })->name('admin.dashboard');
 });
+Route::post('/login', [AuthController::class, 'login'])->name('login');
