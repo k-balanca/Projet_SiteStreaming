@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use App\Models\User;
 
 /*
@@ -48,12 +49,8 @@ Route::get('/favoris', function () {
     return view('favoris');
 })->name('favoris');
 
-Route::get('/compte', function () {
-    return view('profile.compte');
-})->name('compte');
-// Mettre à jour les infos
-Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
-Route::post('/profile/update', [UserController::class, 'update'])->name('profile.update');
+Route::post('/like-movie', [MovieController::class, 'like'])->name('like.movie');
+Route::post('/unlike-movie', [MovieController::class, 'unlike'])->name('unlike.movie');
 
 // Movie detail JSON API (used by welcome.blade.php showMovieDetails)
 
@@ -79,9 +76,23 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         $userCount = User::count();
         $adminCount = User::where('is_admin', true)->count();
+        $users = User::All();
 
-        return view('admin.dashboard', compact('userCount','adminCount'));
+        return view('admin.dashboard', compact('userCount','adminCount','users'));
     })->name('admin.dashboard');
 
+    Route::get('/admin/users', function () {
+        $users = User::All();
+        return view('admin.users', compact('users')); 
+    })->name('admin.users');
+
+});
+
+//Protection avec auth pour que seul l’utilisateur connecté modifie son profil.
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.compte');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 

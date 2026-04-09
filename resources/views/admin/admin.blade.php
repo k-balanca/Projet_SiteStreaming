@@ -25,7 +25,7 @@
         <main class="p-4">
             @yield('content')
         </main>
-
+    
     </div>
 </div>
 </body>

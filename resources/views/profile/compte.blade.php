@@ -24,7 +24,7 @@
         <div class="account-wrapper">
             <section class="profile-panel">
                 <h2>Mon compte</h2>
-               @if(Auth::check())
+                @if(Auth::check())
                     <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&size=100" alt="Photo profil">
 
                     <h3>{{ Auth::user()->name }}</h3>
