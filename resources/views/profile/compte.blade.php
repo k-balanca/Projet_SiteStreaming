@@ -23,7 +23,7 @@
                     <p><strong>ID :</strong> {{ Auth::user()->id }}</p>
                     <p><strong>Compte créé :</strong> {{ Auth::user()->created_at }}</p>
                 </div>
-                <a href="#" class="bouton">Modifier le profil</a>
+                <a href="{{ route('profile.edit') }}" class="bouton">Modifier le profil</a>
             </section>
 
             <section class="list-panel">

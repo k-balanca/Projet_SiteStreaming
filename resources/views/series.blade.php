@@ -8,7 +8,7 @@
     <title>Séries - HYPER Streaming</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
-<body class="body1">
+<body class="body">
 
     @include('header')
 
