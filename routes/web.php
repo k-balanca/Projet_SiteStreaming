@@ -87,6 +87,25 @@ Route::get('/api/movies', function (Request $request) {
         'totalResults' => isset($result['totalResults']) ? intval($result['totalResults']) : 0,
         'movies' => isset($result['Search']) ? $result['Search'] : [],
     ]);
+
+    
 });
 
 
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+//Route côté admin
+Route::middleware(['auth', 'admin'])->group(function () {
+
+    Route::get('/admin', function () {
+
+        $userCount = User::count();
+        $adminCount = User::where('is_admin', true)->count();
+
+        return view('admin.dashboard', compact('userCount','adminCount'));
+    })->name('admin.dashboard');
+});

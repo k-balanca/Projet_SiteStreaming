@@ -595,3 +595,21 @@ nav ul {
 .movie-info{
     flex: 1;
 }
+
+.logout-form {
+    margin-right: 70px;
+}
+
+.logout-btn {
+    height: 40px; 
+    padding: 0 15px;
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: darkred;
+}

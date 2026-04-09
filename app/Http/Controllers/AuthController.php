@@ -20,11 +20,17 @@ class AuthController extends Controller
 
         // Tentative de connexion
         if (Auth::attempt($credentials)) {
+
             // Regénère la session pour éviter les attaques de fixation de session
             $request->session()->regenerate();
-            return redirect('/welcome')->with('success', 'Connexion réussie');
-        }
 
+            // ✅ Redirection selon rôle
+            if (auth()->user()->is_admin) {
+                return redirect()->route('admin.dashboard');
+            }else{
+                return redirect()->route('welcome');
+            }
+        }
         // Retour avec message d'erreur si email ou mot de passe incorrect
         return back()
             ->withInput($request->only('email')) // conserve l'email saisi
