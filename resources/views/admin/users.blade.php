@@ -67,7 +67,7 @@
                         <th>Nom</th>
                         <th>Email</th>
                         <th>Créé le</th>
-                        <th>Supprimer l'utilisateur</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,8 +77,11 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->created_at }}</td>
-                            <td>
-                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
+                            <td style="display:flex; gap:8px; flex-wrap: wrap;">
+                                <a href="{{ route('admin.users.edit', $user->id) }}" style="background-color: #3498db; color: white; text-decoration:none; display:inline-block; padding: 6px 12px; border-radius: 4px;">
+                                    Modifier
+                                </a>
+                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');" style="margin:0;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
@@ -89,7 +92,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">Aucun utilisateur</td>
+                            <td colspan="5">Aucun utilisateur</td>
                         </tr>
                     @endforelse
                 </tbody>

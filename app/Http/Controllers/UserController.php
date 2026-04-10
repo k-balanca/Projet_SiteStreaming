@@ -42,11 +42,43 @@ class UserController extends Controller
 
         return view('compte', compact('user'));
     }
+
     public function edit()
     {
         $user = auth()->user();
         return view('profile.edit', compact('user'));
     }
+
+    public function adminEdit(User $user)
+    {
+        return view('admin.edit_user', compact('user'));
+    }
+
+    public function adminUpdate(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:6|confirmed',
+            'is_admin' => 'sometimes|boolean',
+        ]);
+
+        $data = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+        ];
+
+        if (!empty($validated['password'])) {
+            $data['password'] = bcrypt($validated['password']);
+        }
+
+        $data['is_admin'] = $request->boolean('is_admin');
+
+        $user->update($data);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Utilisateur mis à jour.');
+    }
+
     public function update(Request $request)
     {
         $user = auth()->user();
