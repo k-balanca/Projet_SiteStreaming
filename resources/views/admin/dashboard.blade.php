@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Dashboard Admin</h1>
-    <br>
+    <br><br>
     <div class="cards">
         <div class="card">
             <h3>Total utilisateurs</h3>

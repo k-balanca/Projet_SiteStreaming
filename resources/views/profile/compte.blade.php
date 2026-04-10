@@ -23,7 +23,12 @@
                     <p><strong>ID :</strong> {{ Auth::user()->id }}</p>
                     <p><strong>Compte créé :</strong> {{ Auth::user()->created_at }}</p>
                 </div>
-                <a href="{{ route('profile.edit') }}" class="bouton">Modifier le profil</a>
+                <div class="profile-actions">
+                    <a href="{{ route('profile.edit') }}" class="bouton">Modifier le profil</a>
+                    @if(Auth::user()->is_admin)
+                        <a href="{{ route('admin.dashboard') }}" class="bouton admin-btn">Accéder à l'espace admin</a>
+                    @endif
+                </div>
             </section>
 
         </div>

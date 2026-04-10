@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="{{ asset('css/admin_style.css') }}">
     </head>
     <body>
-        <h1>Liste des utilisateurs</h1>
+        <h1 id="utilisateur">Liste des utilisateurs</h1>
         <br>
         <style>
             table {
@@ -67,6 +67,7 @@
                         <th>Nom</th>
                         <th>Email</th>
                         <th>Créé le</th>
+                        <th>Supprimer l'utilisateur</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,6 +77,15 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->created_at }}</td>
+                            <td>
+                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet utilisateur ?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="background-color: #e74c3c; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                     @empty
                         <tr>

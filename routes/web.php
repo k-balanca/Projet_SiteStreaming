@@ -45,13 +45,14 @@ Route::get('/series', function () {
 
 Route::get('/favoris', [MovieController::class, 'favorites'])->name('favoris');
 
-Route::get('/profile/compte', function () {
-    return view('profile.compte');
-})->name('profile.compte');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/compte', function () {
+        return view('profile.compte');
+    })->name('profile.compte');
 
-Route::get('/profile/edit', function () {
-    return view('profile.edit');
-})->name('profile.edit');
+    Route::get('/profile/edit', [UserController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [UserController::class, 'update'])->name('profile.update');
+});
 
 Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
@@ -113,5 +114,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         return view('admin.dashboard', compact('userCount','adminCount','users'));
     })->name('admin.dashboard');
+
+    Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
 });
 

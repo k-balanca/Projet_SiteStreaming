@@ -190,6 +190,26 @@ nav ul {
     background-color: #f8121e;      
 }
 
+.profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.profile-actions .bouton {
+    padding: 12px 28px;
+}
+
+.profile-actions .bouton:last-child {
+    margin-right: 0;
+}
+
+.retour-admin {
+    margin-bottom: 16px;
+}
+
 /* les containers */
 
 .movie-grid {
@@ -519,6 +539,7 @@ nav ul {
     font-weight:bold;
     cursor:pointer;
     transition:0.3s;
+    margin-top: 2%;
 }
 
 /* Hover bouton */

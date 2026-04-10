@@ -76,11 +76,11 @@
                     <label class="form-label">Nouveau mot de passe</label>
                     <input
                         type="password"
-                        name="new_password"
-                        class="form-control @error('new_password') is-invalid @enderror"
+                        name="password"
+                        class="form-control @error('password') is-invalid @enderror"
                         autocomplete="new-password"
                     >
-                    @error('new_password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                    @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     <div class="form-text">Laisse vide si tu ne veux pas changer ton mot de passe.</div>
                 </div>
                 {{-- CONFIRMATION --}}
@@ -88,7 +88,7 @@
                     <label class="form-label">Confirmer le nouveau mot de passe</label>
                     <input
                         type="password"
-                        name="new_password_confirmation"
+                        name="password_confirmation"
                         class="form-control"
                         autocomplete="new-password"
                     >
@@ -98,7 +98,7 @@
                     <button class="contact-btn" type="submit">
                         Enregistrer
                     </button>
-                    <button href="{{ route('compte') }}" class="contact-btn cancel-btn">
+                    <button href="{{ route('profile.compte') }}" class="contact-btn">
                         Annuler
                     </button>
                 </div>

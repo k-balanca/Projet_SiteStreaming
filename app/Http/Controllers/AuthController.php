@@ -24,12 +24,8 @@ class AuthController extends Controller
             // Regénère la session pour éviter les attaques de fixation de session
             $request->session()->regenerate();
 
-            // ✅ Redirection selon rôle
-            if (auth()->user()->is_admin) {
-                return redirect()->route('admin.dashboard');
-            }else{
-                return redirect()->route('welcome');
-            }
+            // Rediriger tous les utilisateurs vers la page d'accueil après connexion.
+            return redirect()->route('welcome');
         }
         // Retour avec message d'erreur si email ou mot de passe incorrect
         return back()

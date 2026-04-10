@@ -79,7 +79,7 @@ class UserController extends Controller
             $user->update($data);
 
             return redirect()
-                ->route('compte')
+                ->route('profile.compte')
                 ->with('success', 'Profil mis à jour avec succès');
         } catch (ValidationException $e) {
             // Laravel gère déjà ça, mais au cas où
@@ -108,6 +108,14 @@ class UserController extends Controller
         return view('admin.users.index', compact('users'));
     }
      
+        public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->back()->with('success', 'Utilisateur supprimé avec succès.');
+    }
+
 }
 
 

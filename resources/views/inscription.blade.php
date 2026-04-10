@@ -29,21 +29,21 @@
             <form style="width: 500px;" method="POST" action="/inscription" class="flex-column align-items-center">
                  @csrf
                 <div class="form-group">
-                    <label class="text-light" for="exampleInputName1">Nom : </label>
+                    <label class="text-light">Nom : </label>
                     <input type="text" class="form-control" name="name" placeholder="Entrez votre nom">
                 </div>
                 <div class="form-group">
-                    <label class="text-light" for="exampleInputEmail1">Email : </label>
+                    <label class="text-light">Email : </label>
                     <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Entrer votre email">
                 </div>
                 <div class="form-group">
-                    <label  class="text-light" for="exampleInputPassword1">Mot de passe : </label>
+                    <label  class="text-light">Mot de passe : </label>
                     <input type="password" class="form-control" name="password" placeholder="Entrer un mot de passe">
                 </div>
                 <br>
                 <button type="submit" class="btn btn-danger col-8 d-block mx-auto" >S'inscrire</button>  
                 <br>
-                <a href="/" class="col-6 d-block mx-auto">Cliquez ici pour se connecter</a>
+                <a href="{{ route('connexion') }}" class="col-6 d-block mx-auto">Cliquez ici pour se connecter</a>
             </form> 
         </div>
     </body>
