@@ -219,26 +219,43 @@ nav ul {
     scroll-behavior: smooth;
     padding-bottom: 10px;
     max-width: 100%;
-    scrollbar-width: thin;
-    scrollbar-color: #E50914 #333;
+    scrollbar-width: none;
 }
 
 .movie-grid::-webkit-scrollbar {
-    height: 8px;
+    display: none;
 }
 
-.movie-grid::-webkit-scrollbar-track {
-    background: #333;
-    border-radius: 4px;
+/* Boutons de navigation */
+.scroll-left, .scroll-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
 }
 
-.movie-grid::-webkit-scrollbar-thumb {
-    background: #E50914;
-    border-radius: 4px;
+.scroll-left:hover, .scroll-right:hover {
+    background-color: rgba(229, 9, 20, 0.8);
 }
 
-.movie-grid::-webkit-scrollbar-thumb:hover {
-    background: #f8121e;
+.scroll-left {
+    left: 10px;
+}
+
+.scroll-right {
+    right: 10px;
 }
 
 /* Indicateurs de scroll pour les grilles */

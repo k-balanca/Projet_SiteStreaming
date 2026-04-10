@@ -31,42 +31,47 @@
 
     <section class="movie-row">
         <h2>Latest Movies</h2>
-        <div class="movie-grid">
+        <button class="scroll-left" data-target="latest">&lt;</button>
+        <div class="movie-grid" id="latest">
             <?php afficherFilms("latest"); ?>
         </div>
-        <div class="scroll-indicator">→</div>
+        <button class="scroll-right" data-target="latest">&gt;</button>
     </section>
 
     <section class="movie-row">
         <h2>Films d'action</h2>
-        <div class="movie-grid">
+        <button class="scroll-left" data-target="action">&lt;</button>
+        <div class="movie-grid" id="action">
             <?php afficherFilms("action"); ?>
         </div>
-        <div class="scroll-indicator">→</div>
+        <button class="scroll-right" data-target="action">&gt;</button>
     </section>
 
     <section class="movie-row">
         <h2>Films d'horreur</h2>
-        <div class="movie-grid">
+        <button class="scroll-left" data-target="horror">&lt;</button>
+        <div class="movie-grid" id="horror">
             <?php afficherFilms("horror"); ?>
         </div>
-        <div class="scroll-indicator">→</div>
+        <button class="scroll-right" data-target="horror">&gt;</button>
     </section>
 
     <section class="movie-row">
         <h2>Films de comédie</h2>
-        <div class="movie-grid">
+        <button class="scroll-left" data-target="comedy">&lt;</button>
+        <div class="movie-grid" id="comedy">
             <?php afficherFilms("comedy"); ?>
         </div>
-        <div class="scroll-indicator">→</div>
+        <button class="scroll-right" data-target="comedy">&gt;</button>
     </section>
 
     <section class="movie-row">
         <h2>Films populaires</h2>
-        <div class="movie-grid">
+        <button class="scroll-left" data-target="popular">&lt;</button>
+        <div class="movie-grid" id="popular">
             <?php afficherFilms("popular"); ?>
         </div>
-        <div class="scroll-indicator">→</div>
+        <button class="scroll-right" data-target="popular">&gt;</button>
     </section>
 
 </section>
@@ -140,50 +145,22 @@
             }
         }
 
-        // Fonction pour vérifier et afficher les indicateurs de scroll
-        function checkOverflow() {
-            const grids = document.querySelectorAll('.movie-grid');
-            grids.forEach(grid => {
-                const indicator = grid.nextElementSibling;
-                if (indicator && indicator.classList.contains('scroll-indicator')) {
-                    if (grid.scrollWidth > grid.clientWidth) {
-                        indicator.classList.add('show');
-                    } else {
-                        indicator.classList.remove('show');
-                    }
-                }
+        // Gestion des boutons de navigation
+        document.querySelectorAll('.scroll-left').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const grid = document.getElementById(targetId);
+                grid.scrollBy({ left: -300, behavior: 'smooth' });
             });
-        }
-
-        const csrfToken = '{{ csrf_token() }}';
-
-    function likeMovie(imdbid) {
-        fetch('{{ route("like.movie") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({ imdbid })
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.status === 'ok') {
-                alert('Ajouté aux favoris');
-            } else {
-                alert('Erreur: ' + (data.message || ''));
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert('Erreur de connexion');
         });
-    }
 
-        // Vérifier au chargement de la page et au redimensionnement
-        window.addEventListener('load', checkOverflow);
-        window.addEventListener('resize', checkOverflow);
+        document.querySelectorAll('.scroll-right').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-target');
+                const grid = document.getElementById(targetId);
+                grid.scrollBy({ left: 300, behavior: 'smooth' });
+            });
+        });
     </script>
 
 </body>

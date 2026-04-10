@@ -22,16 +22,17 @@
             
             <h2>Top Films</h2>
             
-        
+            <button class="scroll-left" data-target="movieGrid1">&lt;</button>
             <div id="movieGrid1" class="movie-grid">
                 <?php afficherTousLesFilms('new', 1); ?>
             </div>
-            <div class="scroll-indicator">→</div>
+            <button class="scroll-right" data-target="movieGrid1">&gt;</button>
             
+            <button class="scroll-left" data-target="movieGrid2">&lt;</button>
             <div id="movieGrid2" class="movie-grid">
                 <?php afficherTousLesFilms('ara', 1); ?>
             </div>
-            <div class="scroll-indicator">→</div>
+            <button class="scroll-right" data-target="movieGrid2">&gt;</button>
 
 
             <div style="text-align:center; margin-top:20px;">
@@ -68,12 +69,11 @@
 
     function renderCards(items, targetGrid) {
         if (!items || !Array.isArray(items)) return;
-        const charles = items.map(movie => {
-            const poster = movie.Poster !== 'N/A' ? movie.Poster : 'https://via.placeholder.com/300x450';
+        const charles = items.filter(movie => movie.Poster !== 'N/A').map(movie => {
             return `
                     <div class="card" data-imdbid="${movie.imdbID}" onclick="showMovieDetails(this)">
                         <div class="poster-container">
-                            <img src="${poster}" alt="${movie.Title}">
+                            <img src="${movie.Poster}" alt="${movie.Title}">
                             <span class="badge">New Added</span>
                         </div>
                         <p class="movie-title">${movie.Title}</p>
@@ -81,21 +81,8 @@
                 `;
         }).join('');
         targetGrid.insertAdjacentHTML('beforeend', charles);
-        
-        // Vérifier si le contenu dépasse et afficher l'indicateur
-        checkOverflow(targetGrid);
     }
 
-    function checkOverflow(grid) {
-        const indicator = grid.nextElementSibling;
-        if (indicator && indicator.classList.contains('scroll-indicator')) {
-            if (grid.scrollWidth > grid.clientWidth) {
-                indicator.classList.add('show');
-            } else {
-                indicator.classList.remove('show');
-            }
-        }
-    }
 
     function fetchMovies(query, page = 1, append = false) {
         fetch(`/api/movies?query=${encodeURIComponent(query)}&page=${page}&type=movie`)
@@ -165,4 +152,21 @@
             })
             .catch(err => console.error('Erreur détails :', err));
     };
+
+    // Gestion des boutons de navigation
+    document.querySelectorAll('.scroll-left').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const grid = document.getElementById(targetId);
+            grid.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+    });
+
+    document.querySelectorAll('.scroll-right').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const grid = document.getElementById(targetId);
+            grid.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+    });
 </script>

@@ -61,7 +61,10 @@ function renderMovieCards($items) {
     }
 
     foreach ($items['Search'] as $movie) {
-        $poster = ($movie['Poster'] !== 'N/A') ? $movie['Poster'] : 'https://via.placeholder.com/300x450';
+        if ($movie['Poster'] === 'N/A') {
+            continue; // Skip movies without posters
+        }
+        $poster = $movie['Poster'];
         ?>
         <div class="card" data-imdbid="<?php echo htmlspecialchars($movie['imdbID']); ?>" onclick="showMovieDetails(this)">
             <div class="poster-container">

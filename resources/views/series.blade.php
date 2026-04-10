@@ -23,15 +23,17 @@
 
             <h2>Top Séries</h2>
 
+            <button class="scroll-left" data-target="movieGrid1">&lt;</button>
             <div id="movieGrid1" class="movie-grid">
                 <?php afficherToutesLesSeries('orange', 1); ?>
             </div>
-            <div class="scroll-indicator">→</div>
+            <button class="scroll-right" data-target="movieGrid1">&gt;</button>
 
+            <button class="scroll-left" data-target="movieGrid2">&lt;</button>
             <div id="movieGrid2" class="movie-grid">
                 <?php afficherToutesLesSeries('noir', 1); ?>
             </div>
-            <div class="scroll-indicator">→</div>
+            <button class="scroll-right" data-target="movieGrid2">&gt;</button>
 
             <div style="text-align:center; margin-top:20px;">
                 <button id="loadMoreBtn" class="bouton">Afficher +</button>
@@ -55,12 +57,11 @@
 
     function renderCards(items) {
         if (!items || !Array.isArray(items)) return;
-        const cards = items.map(series => {
-            const poster = series.Poster !== 'N/A' ? series.Poster : 'https://via.placeholder.com/300x450';
+        const cards = items.filter(series => series.Poster !== 'N/A').map(series => {
             return `
                 <div class="card" data-imdbid="${series.imdbID}" onclick="showMovieDetails(this)">
                     <div class="poster-container">
-                        <img src="${poster}" alt="${series.Title}">
+                        <img src="${series.Poster}" alt="${series.Title}">
                         <span class="badge">New Added</span>
                     </div>
                     <p class="movie-title">${series.Title}</p>
@@ -69,20 +70,6 @@
         }).join('');
 
         movieGrid1.insertAdjacentHTML('beforeend', cards);
-        
-        // Vérifier si le contenu dépasse et afficher l'indicateur
-        checkOverflow(movieGrid1);
-    }
-
-    function checkOverflow(grid) {
-        const indicator = grid.nextElementSibling;
-        if (indicator && indicator.classList.contains('scroll-indicator')) {
-            if (grid.scrollWidth > grid.clientWidth) {
-                indicator.classList.add('show');
-            } else {
-                indicator.classList.remove('show');
-            }
-        }
     }
 
     function fetchSeries(query, page = 1, append = false) {
@@ -153,7 +140,20 @@
             .catch(err => console.error('Erreur détails :', err));
     };
 
-    // Vérifier le scroll au chargement initial
-    checkOverflow(movieGrid1);
-    checkOverflow(movieGrid2);
+    // Gestion des boutons de navigation
+    document.querySelectorAll('.scroll-left').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const grid = document.getElementById(targetId);
+            grid.scrollBy({ left: -300, behavior: 'smooth' });
+        });
+    });
+
+    document.querySelectorAll('.scroll-right').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-target');
+            const grid = document.getElementById(targetId);
+            grid.scrollBy({ left: 300, behavior: 'smooth' });
+        });
+    });
 </script>
