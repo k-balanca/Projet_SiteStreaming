@@ -60,6 +60,9 @@
                 font-weight: 600;
             }
         </style>
+            <div style="margin-bottom: 20px; display:flex; justify-content:flex-end;">
+                <a href="{{ route('admin.users.create') }}" class="bouton" style="background-color: #2ecc71;">Créer un compte</a>
+            </div>
             <table >
                 <thead>
                     <tr>

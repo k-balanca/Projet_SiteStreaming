@@ -115,6 +115,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         return view('admin.dashboard', compact('userCount','adminCount','users'));
     })->name('admin.dashboard');
 
+    Route::get('/admin/users/create', [UserController::class, 'adminCreate'])->name('admin.users.create');
+    Route::post('/admin/users', [UserController::class, 'adminStore'])->name('admin.users.store');
     Route::get('/admin/users/{user}/edit', [UserController::class, 'adminEdit'])->name('admin.users.edit');
     Route::put('/admin/users/{user}', [UserController::class, 'adminUpdate'])->name('admin.users.update');
     Route::delete('/admin/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');

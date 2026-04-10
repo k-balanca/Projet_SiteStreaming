@@ -49,6 +49,30 @@ class UserController extends Controller
         return view('profile.edit', compact('user'));
     }
 
+    public function adminCreate()
+    {
+        return view('admin.create_user');
+    }
+
+    public function adminStore(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
+            'is_admin' => 'sometimes|boolean',
+        ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+            'is_admin' => $request->boolean('is_admin'),
+        ]);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Compte utilisateur créé avec succès.');
+    }
+
     public function adminEdit(User $user)
     {
         return view('admin.edit_user', compact('user'));

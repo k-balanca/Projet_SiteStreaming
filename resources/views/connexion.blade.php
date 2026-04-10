@@ -38,9 +38,9 @@
                     <input type="password" class="form-control" name="password" placeholder="Mot de passe">
                 </div>
                 <br>
-                <button type="submit" class="btn btn-danger col-8 d-block mx-auto ">Se connecter</button>
+                <button type="submit" class="btn btn-danger col-8 d-block mx-auto">Se connecter</button>
                 <br>
-                <a href="/inscription" class="col-6 d-block mx-auto">Cliquez ici pour s'inscrire</a>
+                <a href="/inscription" class="btn btn-success col-8 d-block mx-auto">Créer un compte</a>
             </form>
         </div>
     </body>
