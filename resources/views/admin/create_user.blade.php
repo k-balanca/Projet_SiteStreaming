@@ -43,8 +43,8 @@
             </div>
 
             <div class="form-actions" style="display:flex; gap:10px; margin-top:20px;">
-                <button type="submit" class="bouton">Créer le compte</button>
-                <a href="{{ route('admin.dashboard') }}" class="bouton" style="background-color:#777;">Annuler</a>
+                <button type="submit" class="btn btn-success">Créer le compte</button>
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">Annuler</a>
             </div>
         </form>
     </div>

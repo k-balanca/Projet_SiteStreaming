@@ -61,7 +61,9 @@
             }
         </style>
             <div style="margin-bottom: 20px; display:flex; justify-content:flex-end;">
-                <a href="{{ route('admin.users.create') }}" class="bouton" style="background-color: #2ecc71;">Créer un compte</a>
+                <button type="button" onclick="window.location.href='{{ route('admin.users.create') }}'" class="btn btn-success">
+                    Créer un compte
+                </button>
             </div>
             <table >
                 <thead>
